@@ -87,15 +87,28 @@ Route::post('/articles', function(Request $request){
     // $article->user_id = Auth::user()->id;
     // $article->save();
 
-    // Article::create([
-    //     'body' => $input['body'],
-    //     'user_id'=> Auth::user()->id
-    // ]);
+    Article::create([
+        'body' => $input['body'],
+        'user_id'=> Auth::user()->id
+    ]);
 
     return 'hello';
 });
 
-Route::get('articles', function(){
-    $articles = Article::all();
-    return view('articles.index', ['articles' => $articles]);
+Route::get('articles', function(Request $request){
+    $perPage = $request->input('per_page', 2);
+
+    $articles = Article::select('body', 'created_at')
+    ->latest()
+    ->paginate($perPage);
+
+    //쿼리 스트링 유지
+    //$articles->withQueryString();
+    //새로운 쿼리 스트링 추가
+    //$articles->appends(['filter' => 'name']);
+
+    return view('articles.index',
+    [
+        'articles' => $articles,
+    ]);
 });
