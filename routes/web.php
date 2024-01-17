@@ -37,12 +37,25 @@ Route::get('/articles/create', function () {
 
 Route::post('/articles', function(Request $request){
     //비어있지 않고, 문자열이고, 255자 제한
-    $request->validate([
-        'body' => [
+    $input = $request->validate([
+        'body' =>[
             'required',
             'string',
             'max:255'
-        ],
+        ]
     ]);
+
+    $host = config('database.connections.mysql.host');
+    $dbname = config('database.connections.mysql.database');
+    $username = config('database.connections.mysql.username');
+    $password = config('database.connections.mysql.password');
+
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+
+    $stmt = $conn->prepare("INSERT INTO articles (body, user_id) VALUES (:body, :userId)");
+
+    $stmt->bindValue(':body', $input['body']) ;
+    $stmt->bindValue(':userId', Auth::id());
+
     return 'hello';
 });
