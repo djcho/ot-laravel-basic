@@ -87,10 +87,15 @@ Route::post('/articles', function(Request $request){
     // $article->user_id = Auth::user()->id;
     // $article->save();
 
-    Article::create([
-        'body' => $input['body'],
-        'user_id'=> Auth::user()->id
-    ]);
+    // Article::create([
+    //     'body' => $input['body'],
+    //     'user_id'=> Auth::user()->id
+    // ]);
 
     return 'hello';
+});
+
+Route::get('articles', function(){
+    $articles = Article::all();
+    return view('articles.index', ['articles' => $articles]);
 });
