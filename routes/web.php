@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
+use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,17 +46,51 @@ Route::post('/articles', function(Request $request){
         ]
     ]);
 
+    /* 기본 PHP를 이용한 방법
     $host = config('database.connections.mysql.host');
     $dbname = config('database.connections.mysql.database');
     $username = config('database.connections.mysql.username');
     $password = config('database.connections.mysql.password');
 
+    //pdo(PHP Data Object)
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
+    //쿼리 준비
     $stmt = $conn->prepare("INSERT INTO articles (body, user_id) VALUES (:body, :userId)");
 
+    //쿼리 값 설정
     $stmt->bindValue(':body', $input['body']) ;
     $stmt->bindValue(':userId', Auth::id());
+
+    //실행
+    $stmt->execute();
+    */
+
+    /* DB 파사드 이용하는 방법
+    DB::insert("INSERT INTO articles (body, user_id) VALUES (:body, :userId)",
+    [
+        'body' => $input['body'],
+        'userId' => Auth::id()
+    ]);
+    */
+
+    /* 쿼리 빌더를 이용하는 방법 => 직접 쿼리 작성 불필요
+    DB::table('articles')->insert([
+        'body' => $input['body'],
+        'user_id' => Auth::id()
+    ]);
+    */
+
+    /* Eloquent ORM 을 이용하는 방법 */
+    // $article = new Article();
+    // $article->body = $input['body'];
+    // $article->user_id = Auth::user()->id;
+    // $article->save();
+
+    Article::create([
+        'body' => $input['body'],
+        'user_id'=> Auth::user()->id
+    ]);
 
     return 'hello';
 });

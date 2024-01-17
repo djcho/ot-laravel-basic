@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->string('body', 255);
+            $table->foreignId('user_id')->index();
             $table->timestamps();
         });
     }
