@@ -9,7 +9,7 @@
                 <div class="bg-white border rounded mb-4 p-3">
                     <p>{{$article->body}}</p>
                     <p>{{$article->user->name}}</p>
-                    <p><a href="/articles/{{$article->id}}">{{$article->created_at->diffForHumans()}}</a></p>
+                    <p><a href="{{route('articles.show', ['article' => $article->id])}}">{{$article->created_at->diffForHumans()}}</a></p>
                 </div>
             @endforeach
         </div>

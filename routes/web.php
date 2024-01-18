@@ -35,7 +35,7 @@ require __DIR__.'/auth.php';
 
 Route::get('/articles/create', function () {
     return view('articles/create');
-});
+})->name('articles.create');
 
 Route::post('/articles', function(Request $request){
     //비어있지 않고, 문자열이고, 255자 제한
@@ -94,7 +94,7 @@ Route::post('/articles', function(Request $request){
     ]);
 
     return 'hello';
-});
+})->name('articles.store');
 
 Route::get('articles', function(Request $request){
     $articles = Article::with('user')
@@ -117,9 +117,9 @@ Route::get('articles', function(Request $request){
         'articles' => $articles,
         //'results' => $results
     ]);
-});
+})->name('articles.index');
 
 //Route Model Binding
 Route::get('articles/{article}', function(Article $article) {
     return view('articles.show', ['article' => $article]);
-});
+})->name('articles.show');
