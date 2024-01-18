@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Http\Request;
 use App\Models\Article;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -98,7 +99,7 @@ Route::post('/articles', function(Request $request){
 Route::get('articles', function(Request $request){
     $perPage = $request->input('per_page', 2);
 
-    $articles = Article::select('body', 'created_at')
+    $articles = Article::select('body', 'user_id', 'created_at')
     ->latest()
     ->paginate($perPage);
 
@@ -107,8 +108,15 @@ Route::get('articles', function(Request $request){
     //새로운 쿼리 스트링 추가
     //$articles->appends(['filter' => 'name']);
 
+    // $results = DB::table('articles as a')
+    // ->join('users as u', 'a.user_id', '=', 'u.id')
+    // ->select(['a.*', 'u.name'])
+    // ->latest()
+    // ->paginate();
+
     return view('articles.index',
     [
         'articles' => $articles,
+        //'results' => $results
     ]);
 });

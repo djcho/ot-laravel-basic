@@ -14,4 +14,9 @@ class Article extends Model
 
     //blacklist
     //protected $guarded = ['id'];
+
+    //관계 설정(One to many)
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }
