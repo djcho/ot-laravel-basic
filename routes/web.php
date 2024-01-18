@@ -94,7 +94,7 @@ Route::post('/articles', function(Request $request){
     ]);
 
     return redirect()->route('articles.index');
-    
+
 })->name('articles.store');
 
 Route::get('articles', function(Request $request){
@@ -102,21 +102,9 @@ Route::get('articles', function(Request $request){
     ->latest()
     ->paginate();
 
-    //쿼리 스트링 유지
-    //$articles->withQueryString();
-    //새로운 쿼리 스트링 추가
-    //$articles->appends(['filter' => 'name']);
-
-    // $results = DB::table('articles as a')
-    // ->join('users as u', 'a.user_id', '=', 'u.id')
-    // ->select(['a.*', 'u.name'])
-    // ->latest()
-    // ->paginate();
-
     return view('articles.index',
     [
         'articles' => $articles,
-        //'results' => $results
     ]);
 })->name('articles.index');
 
@@ -130,7 +118,7 @@ Route::get('articles/{article}/edit', function(Article $article){
     return view('articles.edit', ['article' => $article]);
 })->name('articles.edit');
 
-Route::put('articles/{article}/upate', function(Article $article, Request $request){
+Route::patch('articles/{article}', function(Article $article, Request $request){
     $input = $request->validate([
         'body' =>[
             'required',
@@ -144,3 +132,8 @@ Route::put('articles/{article}/upate', function(Article $article, Request $reque
 
     return redirect()->route('articles.index');
 })->name('articles.update');
+
+Route::delete('article/{article}', function(Article $article) {
+    $article->delete();
+    return redirect()->route('articles.index');
+})->name('articles.delete');
