@@ -97,11 +97,10 @@ Route::post('/articles', function(Request $request){
 });
 
 Route::get('articles', function(Request $request){
-    $perPage = $request->input('per_page', 2);
-
-    $articles = Article::select('body', 'user_id', 'created_at')
+    $articles = Article::with('user')
+    ->select('body', 'user_id', 'created_at')
     ->latest()
-    ->paginate($perPage);
+    ->paginate();
 
     //쿼리 스트링 유지
     //$articles->withQueryString();
