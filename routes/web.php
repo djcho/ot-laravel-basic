@@ -98,7 +98,6 @@ Route::post('/articles', function(Request $request){
 
 Route::get('articles', function(Request $request){
     $articles = Article::with('user')
-    ->select('body', 'user_id', 'created_at')
     ->latest()
     ->paginate();
 
@@ -118,4 +117,9 @@ Route::get('articles', function(Request $request){
         'articles' => $articles,
         //'results' => $results
     ]);
+});
+
+//Route Model Binding
+Route::get('articles/{article}', function(Article $article) {
+    return view('articles.show', ['article' => $article]);
 });
