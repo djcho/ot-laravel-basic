@@ -93,7 +93,8 @@ Route::post('/articles', function(Request $request){
         'user_id'=> Auth::user()->id
     ]);
 
-    return 'hello';
+    return redirect()->route('articles.index');
+    
 })->name('articles.store');
 
 Route::get('articles', function(Request $request){
@@ -123,3 +124,23 @@ Route::get('articles', function(Request $request){
 Route::get('articles/{article}', function(Article $article) {
     return view('articles.show', ['article' => $article]);
 })->name('articles.show');
+
+
+Route::get('articles/{article}/edit', function(Article $article){
+    return view('articles.edit', ['article' => $article]);
+})->name('articles.edit');
+
+Route::put('articles/{article}/upate', function(Article $article, Request $request){
+    $input = $request->validate([
+        'body' =>[
+            'required',
+            'string',
+            'max:255'
+        ]
+    ]);
+
+    $article->body = $input['body'];
+    $article->save();
+
+    return redirect()->route('articles.index');
+})->name('articles.update');
